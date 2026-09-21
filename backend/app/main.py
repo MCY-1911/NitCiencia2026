@@ -22,7 +22,3 @@ app.add_middleware(
 
 app.include_router(captures.router)
 app.include_router(dataset.router)
-
-@app.get("/api/hello")
-def hello():
-    return {"message": "Hola desde FastAPI"}
