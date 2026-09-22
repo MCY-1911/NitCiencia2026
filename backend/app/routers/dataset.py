@@ -1,8 +1,8 @@
 from pathlib import Path
 from fastapi import APIRouter
+from app.config import ALLOWED_LABELS
 
 router = APIRouter(prefix="/api/dataset", tags=["dataset"])
-from app.config import ALLOWED_LABELS
 
 # ============================================================
 # CONFIGURACIÓN

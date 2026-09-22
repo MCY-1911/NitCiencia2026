@@ -4,6 +4,8 @@ from uuid import uuid4
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+
+from app.services.notification_service import notifier
 from app.config import ALLOWED_LABELS
 
 router = APIRouter(prefix="/api/captures", tags=["captures"])
@@ -27,6 +29,11 @@ MAX_FILE_SIZE = 5 * 1024 * 1024
 
 class CaptureLabelRequest(BaseModel):
     label: str
+
+class CaptureResponse(BaseModel):
+    capture_id: str
+    image_url: str
+    created_at: str | None = None
 
 
 # ============================================================
@@ -104,6 +111,8 @@ async def create_capture(image: UploadFile = File(...)):
     finally:
         await image.close()
 
+    await notifier.notify("new_capture")
+
     return {
         "capture_id": capture_id,
         "created_at": created_at.isoformat(),
@@ -137,7 +146,6 @@ def get_latest_capture():
 
         raise HTTPException(status_code=404, detail="No hay capturas pendientes")
 
-
     latest_image = max(images, key=lambda file: file.name)
     capture_id = latest_image.stem.split("_", maxsplit=1)[1]
 
@@ -145,6 +153,35 @@ def get_latest_capture():
         "capture_id": capture_id,
         "image_url": (f"/api/captures/{capture_id}/image"),
     }
+
+# ============================================================
+# GET /api/captures/pending
+# ============================================================
+
+@router.get("/pending", response_model=list[CaptureResponse])
+def get_pending_captures():
+
+    images = [
+        file
+        for file in PENDING_DIR.iterdir()
+        if file.suffix.lower() in {".jpg", ".jpeg", ".png"}
+    ]
+
+    captures = []
+
+    for image in sorted(images, reverse=True):
+
+        capture_id = image.stem.split("_", maxsplit=1)[1]
+
+        captures.append(
+            {
+                "capture_id": capture_id,
+                "image_url": f"/api/captures/{capture_id}/image",
+                "created_at": image.stem.split("_")[0],
+            }
+        )
+
+    return captures
 
 
 # ============================================================
@@ -178,7 +215,7 @@ def get_capture_image(capture_id: str):
 
 
 @router.post("/{capture_id}/label")
-def label_capture(capture_id: str, request: CaptureLabelRequest):
+async def label_capture(capture_id: str, request: CaptureLabelRequest):
     """
     Asocia una etiqueta a una captura pendiente.
 
@@ -206,5 +243,7 @@ def label_capture(capture_id: str, request: CaptureLabelRequest):
     label_dir.mkdir(parents=True, exist_ok=True)
     destination = label_dir / f"{capture_id}{file_path.suffix.lower()}"
     file_path.replace(destination)
+
+    await notifier.notify("dataset_updated")
 
     return {"capture_id": capture_id, "label": request.label, "status": "labeled"}
