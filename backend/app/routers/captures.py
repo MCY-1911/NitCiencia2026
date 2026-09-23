@@ -25,6 +25,7 @@ DATASET_DIR.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg": ".jpg", "image/png": ".png"}
 MAX_FILE_SIZE = 5 * 1024 * 1024
+CAPTURE_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%S%f"
 
 
 class CaptureLabelRequest(BaseModel):
@@ -60,6 +61,16 @@ def find_capture(capture_id: str) -> Path | None:
         return None
 
     return matches[0]
+
+
+def parse_capture_file(file_path: Path):
+    timestamp, capture_id = file_path.stem.split("_", maxsplit=1)
+
+    created_at = datetime.strptime(timestamp, CAPTURE_TIMESTAMP_FORMAT).replace(
+        tzinfo=timezone.utc
+    )
+
+    return capture_id, created_at
 
 
 # ============================================================
@@ -147,11 +158,12 @@ def get_latest_capture():
         raise HTTPException(status_code=404, detail="No hay capturas pendientes")
 
     latest_image = max(images, key=lambda file: file.name)
-    capture_id = latest_image.stem.split("_", maxsplit=1)[1]
+    capture_id, created_at = parse_capture_file(latest_image)
 
     return {
         "capture_id": capture_id,
-        "image_url": (f"/api/captures/{capture_id}/image"),
+        "image_url": f"/api/captures/{capture_id}/image",
+        "created_at": created_at.isoformat()
     }
 
 # ============================================================
@@ -171,13 +183,13 @@ def get_pending_captures():
 
     for image in sorted(images, reverse=True):
 
-        capture_id = image.stem.split("_", maxsplit=1)[1]
+        capture_id, created_at = parse_capture_file(image)
 
         captures.append(
             {
                 "capture_id": capture_id,
                 "image_url": f"/api/captures/{capture_id}/image",
-                "created_at": image.stem.split("_")[0],
+                "created_at": created_at.isoformat(),
             }
         )
 
@@ -243,7 +255,5 @@ async def label_capture(capture_id: str, request: CaptureLabelRequest):
     label_dir.mkdir(parents=True, exist_ok=True)
     destination = label_dir / f"{capture_id}{file_path.suffix.lower()}"
     file_path.replace(destination)
-
-    await notifier.notify("dataset_updated")
 
     return {"capture_id": capture_id, "label": request.label, "status": "labeled"}
