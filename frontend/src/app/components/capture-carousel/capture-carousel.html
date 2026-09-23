@@ -1,8 +1,8 @@
 @if (captures.length > 0) {
-    <p-carousel [value]="captures" [numVisible]="4" [numScroll]="1">
+    <p-carousel [value]="captures" [numVisible]="numVisible" [numScroll]="1" [showNavigators]="showNavigators">
         <ng-template #item let-capture>
             <button
-                class="mx-2 overflow-hidden rounded-xl border border-surface-200 bg-surface-0 shadow-sm transition hover:shadow-md"
+                class="mx-2 cursor-pointer overflow-hidden rounded-xl border border-surface-200 bg-surface-0 shadow-sm transition hover:shadow-md"
                 (click)="selectCapture(capture)">
                 <img [src]="capture.image_url" alt="Captura pendiente" class="h-28 w-40 object-cover">
             </button>
