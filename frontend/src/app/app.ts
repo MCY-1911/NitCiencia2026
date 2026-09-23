@@ -49,9 +49,11 @@ export class App {
 
         this.captures.set(normalizedCaptures);
 
-        if (normalizedCaptures.length) {
-          this.currentCapture.set(normalizedCaptures[0]);
-        }
+        this.currentCapture.set(
+          normalizedCaptures.length > 0
+            ? normalizedCaptures[0]
+            : undefined
+        );
 
       });
 
