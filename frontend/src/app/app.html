@@ -24,7 +24,7 @@
       <!-- Entrenamiento -->
       <div class="flex justify-center">
         <p-button label="Entrenar la IA" severity="info" size="large" [raised]="true"
-          styleClass="w-full max-w-md justify-center py-3 text-lg font-semibold" />
+          styleClass="w-full max-w-md justify-center py-3 text-lg font-semibold" (onClick)="openTrainingDialog()" />
       </div>
 
     </div>
@@ -33,4 +33,8 @@
     <app-class-selector [classes]="classes()" (selected)="onClassSelected($event)" />
 
   </div>
+
 </main>
+
+<app-training-dialog [visible]="trainingDialogVisible()" [training]="training()" [progress]="trainingProgress()"
+  [status]="trainingStatus()" (visibleChange)="trainingDialogVisible.set($event)" (startTraining)="onStartTraining()" />

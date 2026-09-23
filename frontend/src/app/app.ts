@@ -29,6 +29,20 @@ export class App {
   classes = signal<string[]>([]);
   datasetStats = signal<DatasetStats | undefined>(undefined);
 
+  trainingDialogVisible = signal(false);
+  training = signal(false);
+  trainingProgress = signal(0);
+  trainingStatus = signal('Preparando entrenamiento...');
+
+  currentImageUrl = computed(() => {
+
+    const capture = this.currentCapture();
+
+    return capture?.image_url;
+
+  });
+
+
   constructor() {
     this.loadData();
     this.events.connect(event => {
@@ -70,13 +84,6 @@ export class App {
       });
   }
 
-  currentImageUrl = computed(() => {
-
-    const capture = this.currentCapture();
-
-    return capture?.image_url;
-
-  });
 
   onCaptureSelected(capture: Capture) {
     this.currentCapture.set(capture);
@@ -98,6 +105,16 @@ export class App {
         );
         this.loadData();
       });
+  }
+
+  openTrainingDialog() {
+    this.trainingDialogVisible.set(true);
+  }
+
+  onStartTraining() {
+    this.training.set(true);
+    this.trainingProgress.set(0);
+    this.trainingStatus.set('Preparando entrenamiento...');
   }
 
   private normalizeCaptures(captures: Capture[]): Capture[] {
