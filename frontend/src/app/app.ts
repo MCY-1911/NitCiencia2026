@@ -45,11 +45,9 @@ export class App {
   constructor() {
     this.loadData();
     this.events.connect(event => {
-      console.log(
-        'Evento recibido:',
-        event
-      );
-      if (event === 'new_capture') {
+      console.log('Evento recibido:', event);
+
+      if (event.type === 'new_capture') {
         this.loadData();
       }
     });
