@@ -14,6 +14,7 @@ export class TrainingDialog {
 
   @Input() visible = false;
   @Input() training = false;
+  @Input() completed = false;
   @Input() progress = 0;
   @Input() status = '';
 
