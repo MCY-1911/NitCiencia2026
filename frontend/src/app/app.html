@@ -15,13 +15,22 @@
 
   <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
 
-    <!-- Capturas pendientes -->
-    <app-capture-carousel [captures]="captures()" (selected)="onCaptureSelected($event)" />
+    <!-- Columna izquierda -->
+    <div class="flex flex-col gap-6">
 
+      <!-- Capturas pendientes -->
+      <app-capture-carousel [captures]="captures()" (selected)="onCaptureSelected($event)" />
+
+      <!-- Entrenamiento -->
+      <div class="flex justify-center">
+        <p-button label="Entrenar la IA" severity="info" size="large" [raised]="true"
+          styleClass="w-full max-w-md justify-center py-3 text-lg font-semibold" />
+      </div>
+
+    </div>
 
     <!-- Selección de clase -->
     <app-class-selector [classes]="classes()" (selected)="onClassSelected($event)" />
 
   </div>
-
 </main>

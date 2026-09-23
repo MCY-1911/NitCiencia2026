@@ -9,11 +9,13 @@ import { DatasetPanel } from './components/dataset-panel/dataset-panel';
 import { CaptureCarousel } from './components/capture-carousel/capture-carousel';
 import { ClassSelector } from './components/class-selector/class-selector';
 import { Events } from './services/events';
+import { TrainingDialog } from './components/training-dialog/training-dialog';
+import { ButtonModule } from 'primeng/button';
 
 
 @Component({
   selector: 'app-root',
-  imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector],
+  imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector, TrainingDialog, ButtonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
