@@ -36,11 +36,5 @@
 
 </main>
 
-<app-training-dialog
-  [visible]="trainingDialogVisible()"
-  [training]="training()"
-  [completed]="trainingCompleted()"
-  [progress]="trainingProgress()"
-  [status]="trainingStatus()"
-  (visibleChange)="trainingDialogVisible.set($event)"
-  (startTraining)="onStartTraining()" />
+<app-training-dialog [visible]="trainingDialogVisible()" [state]="trainingState()" [progress]="trainingProgress()"
+  [status]="trainingStatus()" (visibleChange)="trainingDialogVisible.set($event)" (startTraining)="onStartTraining()" />

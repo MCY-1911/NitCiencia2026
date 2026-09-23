@@ -11,6 +11,7 @@ import { ClassSelector } from './components/class-selector/class-selector';
 import { Events } from './services/events';
 import { TrainingDialog } from './components/training-dialog/training-dialog';
 import { ButtonModule } from 'primeng/button';
+import { TrainingState } from './models/training.model';
 
 @Component({
   selector: 'app-root',
@@ -29,8 +30,7 @@ export class App {
   datasetStats = signal<DatasetStats | undefined>(undefined);
 
   trainingDialogVisible = signal(false);
-  training = signal(false);
-  trainingCompleted = signal(false);
+  trainingState = signal<TrainingState>('ready');
   trainingProgress = signal(0);
   trainingStatus = signal('Preparando entrenamiento...');
 
@@ -46,26 +46,29 @@ export class App {
   constructor() {
     this.loadData();
     this.events.connect(event => {
-      console.log('Evento recibido:', event);
 
       if (event.type === 'new_capture') {
         this.loadData();
       }
 
       if (event.type === 'training_progress') {
-        this.trainingProgress.set(event.progress ?? 0);
-        this.trainingStatus.set(event.status ?? 'Entrenando...');
+        this.trainingState.set('training');
+        this.trainingProgress.set(
+          event.progress ?? 0
+        );
+        this.trainingStatus.set(
+          event.status ?? 'Entrenando...'
+        );
       }
 
       if (event.type === 'training_completed') {
+        this.trainingState.set('completed');
         this.trainingProgress.set(100);
         this.trainingStatus.set(
           event.status ?? 'Entrenamiento completado'
         );
-
-        this.training.set(false);
-        this.trainingCompleted.set(true);
       }
+
     });
   }
 
@@ -121,27 +124,22 @@ export class App {
   }
 
   openTrainingDialog() {
-    this.training.set(false);
-    this.trainingCompleted.set(false);
+    this.trainingState.set('ready');
     this.trainingProgress.set(0);
     this.trainingStatus.set('Preparado para entrenar');
     this.trainingDialogVisible.set(true);
   }
 
   onStartTraining() {
-    this.training.set(true);
-    this.trainingCompleted.set(false);
+    this.trainingState.set('training');
     this.trainingProgress.set(0);
     this.trainingStatus.set('Iniciando entrenamiento...');
 
     this.api.startTraining().subscribe({
-      next: () => {
-        this.trainingStatus.set('Entrenamiento iniciado...');
-      },
       error: error => {
         console.error('Error al iniciar el entrenamiento:', error);
 
-        this.training.set(false);
+        this.trainingState.set('error');
         this.trainingStatus.set('No se pudo iniciar el entrenamiento');
       }
     });

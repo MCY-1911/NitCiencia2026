@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
-
+import { TrainingState } from '../../models/training.model';
 
 @Component({
   selector: 'app-training-dialog',
@@ -12,14 +12,23 @@ import { ProgressBarModule } from 'primeng/progressbar';
 })
 export class TrainingDialog {
 
-  @Input() visible = false;
-  @Input() training = false;
-  @Input() completed = false;
-  @Input() progress = 0;
-  @Input() status = '';
+  @Input()
+  visible = false;
 
-  @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() startTraining = new EventEmitter<void>();
+  @Input()
+  state: TrainingState = 'ready';
+
+  @Input()
+  progress = 0;
+
+  @Input()
+  status = '';
+
+  @Output()
+  visibleChange = new EventEmitter<boolean>();
+
+  @Output()
+  startTraining = new EventEmitter<void>();
 
   close() {
     this.visibleChange.emit(false);
