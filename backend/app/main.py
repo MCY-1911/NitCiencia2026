@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import captures, dataset, events
+from app.routers import captures, dataset, events, training
 
 app = FastAPI(
     title = "NitCiencia2026 API",
@@ -22,3 +22,4 @@ app.add_middleware(
 app.include_router(captures.router)
 app.include_router(dataset.router)
 app.include_router(events.router)
+app.include_router(training.router)

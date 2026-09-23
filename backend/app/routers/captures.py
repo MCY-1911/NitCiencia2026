@@ -123,7 +123,7 @@ async def create_capture(image: UploadFile = File(...)):
     finally:
         await image.close()
 
-    await notifier.notify("new_capture")
+    await notifier.notify({"type": "new_capture"})
 
     return {
         "capture_id": capture_id,

@@ -12,7 +12,6 @@ import { Events } from './services/events';
 import { TrainingDialog } from './components/training-dialog/training-dialog';
 import { ButtonModule } from 'primeng/button';
 
-
 @Component({
   selector: 'app-root',
   imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector, TrainingDialog, ButtonModule],
@@ -114,7 +113,19 @@ export class App {
   onStartTraining() {
     this.training.set(true);
     this.trainingProgress.set(0);
-    this.trainingStatus.set('Preparando entrenamiento...');
+    this.trainingStatus.set('Iniciando entrenamiento...');
+
+    this.api.startTraining().subscribe({
+      next: () => {
+        this.trainingStatus.set('Entrenamiento iniciado...');
+      },
+      error: error => {
+        console.error('Error al iniciar el entrenamiento:', error);
+
+        this.training.set(false);
+        this.trainingStatus.set('No se pudo iniciar el entrenamiento');
+      }
+    });
   }
 
   private normalizeCaptures(captures: Capture[]): Capture[] {

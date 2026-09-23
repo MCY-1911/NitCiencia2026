@@ -61,4 +61,15 @@ export class Api {
       `${this.apiUrl}/dataset/classes`
     );
   }
+
+  // ============================================================
+  // TRAINING
+  // ============================================================
+
+  startTraining() {
+    return this.http.post<{ status: string }>(
+      `${this.apiUrl}/training/start`,
+      {}
+    );
+  }
 }

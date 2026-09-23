@@ -1,7 +1,7 @@
 import asyncio
 
-class NotificationService:
 
+class NotificationService:
     def __init__(self):
         self.listeners = []
 
@@ -10,13 +10,13 @@ class NotificationService:
         self.listeners.append(queue)
         try:
             while True:
-                message = await queue.get()
-                yield message
+                event = await queue.get()
+                yield event
         finally:
             self.listeners.remove(queue)
 
-    async def notify(self, message: str):
+    async def notify(self, event: dict):
         for listener in self.listeners:
-            await listener.put(message)
+            await listener.put(event)
 
 notifier = NotificationService()
