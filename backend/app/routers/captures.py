@@ -35,6 +35,7 @@ class CaptureResponse(BaseModel):
     capture_id: str
     image_url: str
     created_at: str | None = None
+    label: str | None = None
 
 
 # ============================================================
@@ -227,7 +228,7 @@ def get_capture_image(capture_id: str):
 
 
 @router.post("/{capture_id}/label")
-async def label_capture(capture_id: str, request: CaptureLabelRequest):
+def label_capture(capture_id: str, request: CaptureLabelRequest):
     """
     Asocia una etiqueta a una captura pendiente.
 
