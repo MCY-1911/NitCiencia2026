@@ -1,12 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Capture } from '../models/capture.model';
-import { DatasetStats } from '../models/dataset.model';
-
-export interface DatasetClasses {
-  classes: string[];
-}
-
+import { DatasetClasses, DatasetStats } from '../models/dataset.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +9,8 @@ export interface DatasetClasses {
 export class Api {
 
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api';
-  private backendUrl = 'http://127.0.0.1:8000';
+  private backendUrl = 'http://localhost:8000';
+  private apiUrl = `${this.backendUrl}/api`;
 
   // ============================================================
   // CAPTURES
@@ -45,7 +40,7 @@ export class Api {
     );
   }
 
-  getImageUrl(imageUrl: string) {
+  getImageUrl(imageUrl: string): string {
     return `${this.backendUrl}${imageUrl}`;
   }
 

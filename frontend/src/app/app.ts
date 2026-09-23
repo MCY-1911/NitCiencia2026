@@ -43,18 +43,18 @@ export class App {
   loadData() {
     this.api.getPendingCaptures()
       .subscribe(captures => {
-
-        const normalizedCaptures =
-          this.normalizeCaptures(captures);
+        const normalizedCaptures = this.normalizeCaptures(captures);
+        const currentCaptureId = this.currentCapture()?.capture_id;
 
         this.captures.set(normalizedCaptures);
 
-        this.currentCapture.set(
-          normalizedCaptures.length > 0
-            ? normalizedCaptures[0]
-            : undefined
+        const currentCapture = normalizedCaptures.find(
+          capture => capture.capture_id === currentCaptureId
         );
 
+        this.currentCapture.set(
+          currentCapture ?? normalizedCaptures[0]
+        );
       });
 
     this.api.getDatasetStats()
@@ -99,7 +99,6 @@ export class App {
   }
 
   private normalizeCaptures(captures: Capture[]): Capture[] {
-
     return captures.map(capture => ({
       ...capture,
       image_url: this.api.getImageUrl(capture.image_url)
