@@ -1,0 +1,29 @@
+<p-card>
+    <ng-template #title>
+        Dataset
+    </ng-template>
+
+    @if(stats){
+        <div class="flex flex-col gap-5">
+            <div class="flex justify-between items-center">
+                <span>
+                    Total imágenes
+                </span>
+                <p-tag [value]="stats.total.toString()" severity="info"/>
+            </div>
+
+            @for( label of classes; track label ){
+                <div>
+                    <div class="flex justify-between  mb-2">
+                        <span class="font-medium">{{label}}</span>
+                        <span>{{stats.classes[label] ?? 0}}</span>
+                    </div>
+                    <p-progressbar [value]="
+                                    percentage(label)
+                                " [showValue]="false" />
+                </div>
+        }
+        </div>
+    }
+    @else { <p> Esperando datos...</p>}
+</p-card>

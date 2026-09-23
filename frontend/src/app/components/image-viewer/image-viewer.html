@@ -1,0 +1,63 @@
+<p-card>
+
+
+    <ng-template #title>
+
+        Imagen seleccionada
+
+    </ng-template>
+
+
+
+    <div
+        class="
+            mx-auto
+            flex
+            aspect-video
+            max-w-[720px]
+            items-center
+            justify-center
+            overflow-hidden
+            rounded-xl
+            bg-surface-900
+        "
+    >
+
+
+        @if (imageUrl) {
+
+
+            <img
+                [src]="imageUrl"
+                alt="Imagen capturada"
+                class="
+                    h-full
+                    w-full
+                    object-contain
+                "
+            >
+
+
+        }
+        @else {
+
+
+            <div
+                class="
+                    text-center
+                    text-surface-400
+                "
+            >
+
+                Esperando imagen...
+
+            </div>
+
+
+        }
+
+
+    </div>
+
+
+</p-card>

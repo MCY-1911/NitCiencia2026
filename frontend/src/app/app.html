@@ -1,0 +1,27 @@
+<app-header></app-header>
+
+<main class="mx-auto max-w-7xl p-6">
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
+
+    <!-- Imagen principal -->
+    <app-image-viewer [imageUrl]="currentImageUrl()" />
+
+    <!-- Dataset -->
+    <app-dataset-panel [stats]="datasetStats()" [classes]="classes()" />
+
+  </div>
+
+
+  <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
+
+    <!-- Capturas pendientes -->
+    <app-capture-carousel [captures]="captures()" (selected)="onCaptureSelected($event)" />
+
+
+    <!-- Selección de clase -->
+    <app-class-selector [classes]="classes()" (selected)="onClassSelected($event)" />
+
+  </div>
+
+</main>
