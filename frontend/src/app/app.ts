@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, OnDestroy } from '@angular/core';
+import { Component, computed, inject, signal, OnDestroy, WritableSignal } from '@angular/core';
 
 import { Api } from './services/api';
 import { Capture } from './models/capture.model';
@@ -30,7 +30,7 @@ export class App implements OnDestroy {
   
   captures = signal<Capture[]>([]);
   currentCapture = signal<Capture | undefined>(undefined);
-  liveImageUrl = signal<string | undefined>(undefined);
+  liveImageUrl: WritableSignal<string> = signal('');
 
   classes = signal<string[]>([]);
   datasetStats = signal<DatasetStats | undefined>(undefined);
@@ -166,8 +166,8 @@ export class App implements OnDestroy {
       finalize(() => this.loadingLiveFrame = false)
     ).subscribe({
       next: response => {
-        this.liveImageUrl.set(`data:image/jpeg;base64,${response.result.image}`);
-      },
+        this.liveImageUrl.set(`data:image/jpeg;base64,${response.result}`);
+        console.log(response.result.substring(0, 50));      },
       error: error => {
         console.error('Error obteniendo imagen del MCU:', error);
       }
@@ -181,7 +181,7 @@ export class App implements OnDestroy {
 
     this.livePolling = setInterval(() => {
       this.loadLiveFrame();
-    }, 500);
+    }, 200);
   }
 
   stopLivePolling() {

@@ -80,11 +80,6 @@ export class Api {
   // ============================================================
 
   getLiveFrame() {
-    return this.http.post<McuImageResponse>(this.mcuUrl, {
-      jsonrpc: '2.0',
-      method: 'get_image_from_camera',
-      params: {},
-      id: 1
-    });
+    return this.http.post<McuImageResponse>(`${this.apiUrl}/mcu/image`, {});
   }
 }
