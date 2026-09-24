@@ -10,18 +10,17 @@ import { Capture } from '../../models/capture.model';
 })
 export class CaptureCarousel {
 
-  @Input()
-  captures: Capture[] = [];
+  @Input() captures: Capture[] = [];
+  @Input() selectedCapture?: Capture;
 
-  @Output()
-  selected = new EventEmitter<Capture>();
+  @Output() selected = new EventEmitter<Capture>();
 
   get numVisible(): number {
-    return Math.min(this.captures.length, 4);
+    return Math.min(this.captures.length, 3);
   }
 
   get showNavigators(): boolean {
-    return this.captures.length > 4;
+    return this.captures.length > 3;
   }
 
   selectCapture(capture: Capture) {

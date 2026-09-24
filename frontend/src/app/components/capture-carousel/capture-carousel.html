@@ -1,10 +1,11 @@
 @if (captures.length > 0) {
     <p-carousel [value]="captures" [numVisible]="numVisible" [numScroll]="1" [showNavigators]="showNavigators">
         <ng-template #item let-capture>
-            <button
-                class="mx-2 cursor-pointer overflow-hidden rounded-xl border border-surface-200 bg-surface-0 shadow-sm transition hover:shadow-md"
-                (click)="selectCapture(capture)">
-                <img [src]="capture.image_url" alt="Captura pendiente" class="h-28 w-40 object-cover">
+            <button class="mx-3 block w-[calc(100%-1.5rem)] cursor-pointer overflow-hidden rounded-xl border-4 bg-surface-0 shadow-sm transition hover:shadow-md"
+                [class.border-green-500]="selectedCapture?.capture_id === capture.capture_id"
+                [class.border-transparent]="selectedCapture?.capture_id !== capture.capture_id" (click)="selectCapture(capture)">
+
+                <img [src]="capture.image_url" alt="Captura pendiente" class="aspect-video w-full object-cover">
             </button>
         </ng-template>
     </p-carousel>
