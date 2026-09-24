@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-3">
     @for(label of classes; track label) {
-        <p-button [label]="label" styleClass="w-full" size="large" (onClick)="selectClass(label)" />
+        <p-button [label]="label" styleClass="w-full" size="large" (onClick)="selectClass(label)" [disabled]="disabled" />
     }
 </div>

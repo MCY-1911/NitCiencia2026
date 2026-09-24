@@ -9,11 +9,10 @@ import { ButtonModule } from 'primeng/button';
 })
 export class ClassSelector {
 
-  @Input()
-  classes: string[] = [];
+  @Input() classes: string[] = [];
+  @Input() disabled = false;
 
-  @Output()
-  selected = new EventEmitter<string>();
+  @Output() selected = new EventEmitter<string>();
 
   
   selectClass(label: string) {

@@ -89,9 +89,7 @@ export class App implements OnDestroy {
           capture => capture.capture_id === currentCaptureId
         );
 
-        this.currentCapture.set(
-          currentCapture ?? normalizedCaptures[0]
-        );
+        this.currentCapture.set(currentCapture);
       });
 
     this.api.getDatasetStats()
