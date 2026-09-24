@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
@@ -80,28 +80,50 @@ def parse_capture_file(file_path: Path):
 
 
 @router.post("")
-async def create_capture(image: UploadFile = File(...)):
-    """
-    Recibe una imagen y la almacena como captura pendiente.
-    
-    El archivo debe enviarse mediante multipart/form-data
-    utilizando el campo:
-        image
-    """
+async def create_capture(request: Request):
 
-    if image.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(status_code=415, detail="Formato de imagen no soportado")
+    content_type = request.headers.get("content-type", "").split(";")[0].lower()
+    extension = ALLOWED_IMAGE_TYPES.get(content_type)
 
-    # --------------------------------------------------------
-    # Crear nombre del archivo
-    # --------------------------------------------------------
+    if extension is None:
+        raise HTTPException(status_code=415, detail="Formato de imagen no permitido")
 
     capture_id = str(uuid4())
     created_at = datetime.now(timezone.utc)
+
     timestamp = created_at.strftime("%Y%m%dT%H%M%S%f")
-    extension = ALLOWED_IMAGE_TYPES[image.content_type]
-    filename = f"{timestamp}_{capture_id}{extension}"
-    file_path = PENDING_DIR / filename
+
+    file_path = PENDING_DIR / f"{timestamp}_{capture_id}{extension}"
+
+    file_size = 0
+
+    try:
+        with file_path.open("wb") as file:
+            async for chunk in request.stream():
+                file_size += len(chunk)
+                if file_size > MAX_FILE_SIZE:
+                    raise HTTPException(
+                        status_code=413,
+                        detail="La imagen supera el tamaño máximo permitido",
+                    )
+                file.write(chunk)
+
+    except Exception:
+        file_path.unlink(missing_ok=True)
+        raise
+
+    if file_size == 0:
+        file_path.unlink(missing_ok=True)
+
+        raise HTTPException(status_code=400, detail="La imagen está vacía")
+
+    await notifier.notify({"type": "new_capture"})
+
+    return {
+        "capture_id": capture_id,
+        "image_url": f"/api/captures/{capture_id}/image",
+        "created_at": created_at.isoformat(),
+    }
 
     # --------------------------------------------------------
     # Guardar la imagen por bloques
