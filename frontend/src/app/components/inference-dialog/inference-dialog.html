@@ -1,0 +1,32 @@
+<p-dialog header="Prueba tu modelo" [modal]="true" [visible]="visible" (visibleChange)="visibleChange.emit($event)"
+    [closable]="false" [style]="{ width: '70rem', maxWidth: '90vw' }">
+
+    <div class="flex flex-col gap-6">
+
+        <div
+            class="mx-auto flex aspect-video w-full max-w-4xl items-center justify-center overflow-hidden rounded-xl bg-surface-900">
+            @if (liveImageUrl) {
+            <img [src]="liveImageUrl" alt="Vista en directo" class="h-full w-full object-contain">
+            } @else {
+            <div class="text-center text-surface-400">
+                Esperando imagen de la cámara...
+            </div>
+            }
+        </div>
+
+        <div class="text-center">
+            <p class="text-lg font-medium">
+                Vista en directo
+            </p>
+            <p class="mt-2 text-surface-500">
+                Pulsa el botón del dispositivo para identificar el objeto.
+            </p>
+        </div>
+
+        <div class="flex justify-end">
+            <p-button label="Finalizar" severity="secondary" (onClick)="close()" />
+        </div>
+
+    </div>
+
+</p-dialog>

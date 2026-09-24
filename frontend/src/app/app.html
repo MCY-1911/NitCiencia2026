@@ -48,4 +48,6 @@
 <p-confirmdialog [closable]="false"/>
 
 <app-training-dialog [visible]="trainingDialogVisible()" [state]="trainingState()" [progress]="trainingProgress()"
-  [status]="trainingStatus()" (visibleChange)="trainingDialogVisible.set($event)" (startTraining)="onStartTraining()" />
+  [status]="trainingStatus()" (visibleChange)="trainingDialogVisible.set($event)" (startTraining)="onStartTraining()" (testModel)="openInferenceDialog()"/>
+
+<app-inference-dialog [visible]="inferenceDialogVisible()" [liveImageUrl]="liveImageUrl()" (visibleChange)="inferenceDialogVisible.set($event)" />

@@ -12,23 +12,14 @@ import { TrainingState } from '../../models/training.model';
 })
 export class TrainingDialog {
 
-  @Input()
-  visible = false;
+  @Input() visible = false;
+  @Input() state: TrainingState = 'ready';
+  @Input() progress = 0;
+  @Input() status = '';
 
-  @Input()
-  state: TrainingState = 'ready';
-
-  @Input()
-  progress = 0;
-
-  @Input()
-  status = '';
-
-  @Output()
-  visibleChange = new EventEmitter<boolean>();
-
-  @Output()
-  startTraining = new EventEmitter<void>();
+  @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() startTraining = new EventEmitter<void>();
+  @Output() testModel = new EventEmitter<void>();
 
   close() {
     this.visibleChange.emit(false);
@@ -36,6 +27,10 @@ export class TrainingDialog {
 
   start() {
     this.startTraining.emit();
+  }
+
+  test() {
+    this.testModel.emit();
   }
 
 }

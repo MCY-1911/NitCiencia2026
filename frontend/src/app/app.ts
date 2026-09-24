@@ -15,10 +15,11 @@ import { TrainingState } from './models/training.model';
 import { finalize } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InferenceDialog } from './components/inference-dialog/inference-dialog';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector, TrainingDialog, ButtonModule, ConfirmDialogModule],
+  imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector, TrainingDialog, ButtonModule, ConfirmDialogModule, InferenceDialog],
   providers: [ConfirmationService],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -43,6 +44,8 @@ export class App implements OnDestroy {
   trainingState = signal<TrainingState>('ready');
   trainingProgress = signal(0);
   trainingStatus = signal('Preparando entrenamiento...');
+
+  inferenceDialogVisible = signal(false);
 
   currentImageUrl = computed(() => {
     const capture = this.currentCapture();
@@ -227,6 +230,11 @@ export class App implements OnDestroy {
           console.error('Error eliminando captura:', error);
         }
       });
+  }
+
+  openInferenceDialog() {
+    this.trainingDialogVisible.set(false);
+    this.inferenceDialogVisible.set(true);
   }
 
   private normalizeCaptures(captures: Capture[]): Capture[] {

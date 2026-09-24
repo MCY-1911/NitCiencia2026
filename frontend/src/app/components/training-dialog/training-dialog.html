@@ -21,11 +21,13 @@
     <div class="flex flex-col gap-5">
         <div>
             <p class="font-medium">Entrenamiento completado</p>
-            <p class="mt-2 text-sm text-surface-500">{{ status }}</p>
+            <p class="mt-2 text-sm text-surface-500">El modelo ya está preparado para reconocer objetos.</p>
         </div>
+
         <p-progressbar [value]="100" [showValue]="true" />
+
         <div class="flex justify-end">
-            <p-button label="Cerrar" severity="info" (onClick)="close()" />
+            <p-button label="Probar modelo" severity="success" (onClick)="test()" />
         </div>
     </div>
     } @else if (state === 'error') {
