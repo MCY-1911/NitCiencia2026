@@ -1,63 +1,34 @@
 <p-card>
+    <p-tabs value="captures" (valueChange)="onTabChange($event)">
+        <p-tablist>
+            <p-tab value="captures">Capturas</p-tab>
+            <p-tab value="live">En directo</p-tab>
+        </p-tablist>
 
+        <p-tabpanels>
+            <p-tabpanel value="captures">
+                <div
+                    class="mx-auto flex aspect-video max-w-[720px] items-center justify-center overflow-hidden rounded-xl bg-surface-900">
+                    @if (imageUrl) {
+                    <img [src]="imageUrl" alt="Imagen capturada" class="h-full w-full object-contain">
+                    } @else {
+                    <div class="text-center text-surface-400">
+                        Esperando imagen...
+                    </div>
+                    }
+                </div>
+            </p-tabpanel>
 
-    <ng-template #title>
-
-        Imagen seleccionada
-
-    </ng-template>
-
-
-
-    <div
-        class="
-            mx-auto
-            flex
-            aspect-video
-            max-w-[720px]
-            items-center
-            justify-center
-            overflow-hidden
-            rounded-xl
-            bg-surface-900
-        "
-    >
-
-
-        @if (imageUrl) {
-
-
-            <img
-                [src]="imageUrl"
-                alt="Imagen capturada"
-                class="
-                    h-full
-                    w-full
-                    object-contain
-                "
-            >
-
-
-        }
-        @else {
-
-
-            <div
-                class="
-                    text-center
-                    text-surface-400
-                "
-            >
-
-                Esperando imagen...
-
-            </div>
-
-
-        }
-
-
-    </div>
-
-
+            <p-tabpanel value="live">
+                <div
+                    class="mx-auto flex aspect-video max-w-[720px] items-center justify-center overflow-hidden rounded-xl bg-surface-900">
+                    @if (liveImageUrl) {
+                    <img [src]="liveImageUrl" alt="Vista en directo" class="h-full w-full object-contain">
+                    } @else {
+                    <div class="text-center text-surface-400">Conectando con la cámara...</div>
+                    }
+                </div>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
 </p-card>

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnDestroy } from '@angular/core';
 
 import { Api } from './services/api';
 import { Capture } from './models/capture.model';
@@ -19,13 +19,18 @@ import { TrainingState } from './models/training.model';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnDestroy {
 
   private api = inject(Api);
   private events = inject(Events);
 
+  private livePolling?: ReturnType<typeof setInterval>;
+  private liveFrameCounter = 0;
+
   captures = signal<Capture[]>([]);
   currentCapture = signal<Capture | undefined>(undefined);
+  liveImageUrl = signal<string | undefined>(undefined);
+
   classes = signal<string[]>([]);
   datasetStats = signal<DatasetStats | undefined>(undefined);
 
@@ -35,13 +40,11 @@ export class App {
   trainingStatus = signal('Preparando entrenamiento...');
 
   currentImageUrl = computed(() => {
-
     const capture = this.currentCapture();
-
     return capture?.image_url;
-
   });
 
+  viewerTab = signal('captures');
 
   constructor() {
     this.loadData();
@@ -100,6 +103,14 @@ export class App {
       });
   }
 
+  onViewerTabChange(tab: string) {
+    this.viewerTab.set(tab);
+    if (tab === 'live') {
+      this.startLivePolling();
+    } else {
+      this.stopLivePolling();
+    }
+  }
 
   onCaptureSelected(capture: Capture) {
     this.currentCapture.set(capture);
@@ -145,11 +156,36 @@ export class App {
     });
   }
 
+  loadLiveFrame() {
+    this.liveFrameCounter++;
+    this.liveImageUrl.set(`https://picsum.photos/640/360?random=${this.liveFrameCounter}`);
+  }
+
+  startLivePolling() {
+    if (this.livePolling) return;
+
+    this.loadLiveFrame();
+
+    this.livePolling = setInterval(() => {
+      this.loadLiveFrame();
+    }, 500);
+  }
+
+  stopLivePolling() {
+    if (!this.livePolling) return;
+
+    clearInterval(this.livePolling);
+    this.livePolling = undefined;
+  }
+
   private normalizeCaptures(captures: Capture[]): Capture[] {
     return captures.map(capture => ({
       ...capture,
       image_url: this.api.getImageUrl(capture.image_url)
     }));
+  }
 
+  ngOnDestroy() {
+    this.stopLivePolling();
   }
 }
