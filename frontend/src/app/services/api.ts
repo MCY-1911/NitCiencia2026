@@ -46,6 +46,10 @@ export class Api {
     return `${this.backendUrl}${imageUrl}`;
   }
 
+  deleteCapture(captureId: string) {
+    return this.http.delete<void>(`${this.apiUrl}/captures/${captureId}`);
+  }
+
 
   // ============================================================
   // DATASET

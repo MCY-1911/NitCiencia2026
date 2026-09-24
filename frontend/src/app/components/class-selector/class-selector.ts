@@ -13,9 +13,14 @@ export class ClassSelector {
   @Input() disabled = false;
 
   @Output() selected = new EventEmitter<string>();
+  @Output() deleteSelected = new EventEmitter<void>();
 
   
   selectClass(label: string) {
     this.selected.emit(label);
+  }
+
+  deleteCapture() {
+    this.deleteSelected.emit();
   }
 }

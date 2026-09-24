@@ -13,10 +13,13 @@ import { TrainingDialog } from './components/training-dialog/training-dialog';
 import { ButtonModule } from 'primeng/button';
 import { TrainingState } from './models/training.model';
 import { finalize } from 'rxjs';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector, TrainingDialog, ButtonModule],
+  imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector, TrainingDialog, ButtonModule, ConfirmDialogModule],
+  providers: [ConfirmationService],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -24,6 +27,7 @@ export class App implements OnDestroy {
 
   private api = inject(Api);
   private events = inject(Events);
+  private confirmationService = inject(ConfirmationService);
 
   private livePolling?: ReturnType<typeof setInterval>;
   private loadingLiveFrame = false;
@@ -188,6 +192,41 @@ export class App implements OnDestroy {
 
     clearInterval(this.livePolling);
     this.livePolling = undefined;
+  }
+
+  confirmDeleteCapture() {
+    const capture = this.currentCapture();
+
+    if (!capture) return;
+
+    this.confirmationService.confirm({
+      header: 'Eliminar captura',
+      message: '¿Seguro que quieres eliminar esta captura?',
+      acceptLabel: 'Eliminar',
+      rejectLabel: 'Cancelar',
+      acceptButtonProps: {
+        severity: 'danger'
+      },
+      rejectButtonProps: {
+        severity: 'secondary',
+        outlined: true
+      },
+      accept: () => {
+        this.deleteCapture(capture);
+      }
+    });
+  }
+
+  deleteCapture(capture: Capture) {
+    this.api.deleteCapture(capture.capture_id)
+      .subscribe({
+        next: () => {
+          this.loadData();
+        },
+        error: error => {
+          console.error('Error eliminando captura:', error);
+        }
+      });
   }
 
   private normalizeCaptures(captures: Capture[]): Capture[] {

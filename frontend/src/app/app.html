@@ -11,7 +11,7 @@
     <!-- Selección de clase -->
     @if (viewerTab() === 'captures') {
       <div class="flex h-full items-center">
-        <app-class-selector [classes]="classes()" (selected)="onClassSelected($event)" class="w-full" [disabled]="!currentCapture()"/>
+        <app-class-selector [classes]="classes()" (selected)="onClassSelected($event)" (deleteSelected)="confirmDeleteCapture()" class="w-full" [disabled]="!currentCapture()"/>
       </div>
     }
 
@@ -44,6 +44,8 @@
   </div>
 
 </main>
+
+<p-confirmdialog [closable]="false"/>
 
 <app-training-dialog [visible]="trainingDialogVisible()" [state]="trainingState()" [progress]="trainingProgress()"
   [status]="trainingStatus()" (visibleChange)="trainingDialogVisible.set($event)" (startTraining)="onStartTraining()" />

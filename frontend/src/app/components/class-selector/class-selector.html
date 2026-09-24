@@ -2,4 +2,8 @@
     @for(label of classes; track label) {
         <p-button [label]="label" styleClass="w-full" size="large" (onClick)="selectClass(label)" [disabled]="disabled" />
     }
+    <div class="mt-6">
+        <p-button label="Eliminar" severity="danger" size="large" styleClass="w-full" [disabled]="disabled"
+            (onClick)="deleteCapture()" />
+    </div>
 </div>

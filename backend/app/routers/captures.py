@@ -234,3 +234,18 @@ def label_capture(capture_id: str, request: CaptureLabelRequest):
     file_path.replace(destination)
 
     return {"capture_id": capture_id, "label": request.label, "status": "labeled"}
+
+
+# ============================================================
+# DELETE /api/captures/{capture_id}
+# ============================================================
+
+
+@router.delete("/{capture_id}", status_code=204)
+async def delete_capture(capture_id: str):
+    capture_path = find_capture(capture_id)
+
+    if not capture_path:
+        raise HTTPException(status_code=404, detail="Captura no encontrada")
+
+    capture_path.unlink()
