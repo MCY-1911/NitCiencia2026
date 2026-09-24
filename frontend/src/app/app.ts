@@ -12,6 +12,7 @@ import { Events } from './services/events';
 import { TrainingDialog } from './components/training-dialog/training-dialog';
 import { ButtonModule } from 'primeng/button';
 import { TrainingState } from './models/training.model';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -25,8 +26,8 @@ export class App implements OnDestroy {
   private events = inject(Events);
 
   private livePolling?: ReturnType<typeof setInterval>;
-  private liveFrameCounter = 0;
-
+  private loadingLiveFrame = false;
+  
   captures = signal<Capture[]>([]);
   currentCapture = signal<Capture | undefined>(undefined);
   liveImageUrl = signal<string | undefined>(undefined);
@@ -157,8 +158,20 @@ export class App implements OnDestroy {
   }
 
   loadLiveFrame() {
-    this.liveFrameCounter++;
-    this.liveImageUrl.set(`https://picsum.photos/640/360?random=${this.liveFrameCounter}`);
+    if (this.loadingLiveFrame) return;
+
+    this.loadingLiveFrame = true;
+
+    this.api.getLiveFrame().pipe(
+      finalize(() => this.loadingLiveFrame = false)
+    ).subscribe({
+      next: response => {
+        this.liveImageUrl.set(`data:image/jpeg;base64,${response.result.image}`);
+      },
+      error: error => {
+        console.error('Error obteniendo imagen del MCU:', error);
+      }
+    });
   }
 
   startLivePolling() {

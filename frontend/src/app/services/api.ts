@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Capture } from '../models/capture.model';
 import { DatasetClasses, DatasetStats } from '../models/dataset.model';
+import { McuImageResponse } from '../models/imageMCU.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class Api {
   private http = inject(HttpClient);
   private backendUrl = 'http://localhost:8000';
   private apiUrl = `${this.backendUrl}/api`;
+  private mcuUrl = 'http://192.168.53.209/jsonrpc';
 
   // ============================================================
   // CAPTURES
@@ -71,5 +73,18 @@ export class Api {
       `${this.apiUrl}/training/start`,
       {}
     );
+  }
+
+  // ============================================================
+  // STREAMING
+  // ============================================================
+
+  getLiveFrame() {
+    return this.http.post<McuImageResponse>(this.mcuUrl, {
+      jsonrpc: '2.0',
+      method: 'get_image_from_camera',
+      params: {},
+      id: 1
+    });
   }
 }
