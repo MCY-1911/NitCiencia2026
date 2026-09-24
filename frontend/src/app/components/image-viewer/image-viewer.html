@@ -1,5 +1,5 @@
 <p-card>
-    <p-tabs value="captures" (valueChange)="onTabChange($event)">
+    <!-- <p-tabs value="captures" (valueChange)="onTabChange($event)">
         <p-tablist>
             <p-tab value="captures">Capturas</p-tab>
             <p-tab value="live">En directo</p-tab>
@@ -30,5 +30,13 @@
                 </div>
             </p-tabpanel>
         </p-tabpanels>
-    </p-tabs>
+    </p-tabs> -->
+    <div
+        class="mx-auto flex aspect-video max-w-[720px] items-center justify-center overflow-hidden rounded-xl bg-surface-900">
+        @if (liveImageUrl) {
+        <img [src]="liveImageUrl" alt="Vista en directo" class="h-full w-full object-contain">
+        } @else {
+        <div class="text-center text-surface-400">Conectando con la cámara...</div>
+        }
+    </div>
 </p-card>

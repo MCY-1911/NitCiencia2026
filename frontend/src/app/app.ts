@@ -49,6 +49,7 @@ export class App implements OnDestroy {
 
   constructor() {
     this.loadData();
+    this.startLivePolling();
     this.events.connect(event => {
 
       if (event.type === 'new_capture') {
