@@ -94,3 +94,5 @@
 <app-training-dialog [visible]="trainingDialogVisible()" [state]="trainingState()" [progress]="trainingProgress()"
   [status]="trainingStatus()" (visibleChange)="trainingDialogVisible.set($event)" (startTraining)="onStartTraining()"
   (cancelTraining)="cancelInferenceTraining()" (testModel)="finishTraining()" />
+
+<p-confirmdialog [closable]="false" />
