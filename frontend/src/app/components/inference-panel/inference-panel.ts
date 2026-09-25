@@ -23,4 +23,28 @@ export class InferencePanel {
     if (!this.result) return [];
     return Object.entries(this.result.probabilities).sort((a, b) => b[1] - a[1]);
   }
+
+  readonly fruitIcons: Record<string, string> = {
+    poma: '🍎',
+    manzana: '🍎',
+    pera: '🍐',
+    platan: '🍌',
+    platano: '🍌',
+    banana: '🍌',
+    taronja: '🍊',
+    naranja: '🍊',
+    llimona: '🍋',
+    limon: '🍋',
+    kiwi: '🥝'
+  };
+
+  getFruitIcon(label: string): string {
+    const normalized = label
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    return this.fruitIcons[normalized] ?? '🍓';
+  }
+  
 }
