@@ -5,7 +5,7 @@ import { AppEvent } from '../models/event.model';
   providedIn: 'root'
 })
 export class Events {
-  private url = 'https://aiotserver.uji.es/coral/api/events/stream';
+  private url = 'http://localhost:8000/api/events/stream';
 
   connect(callback: (event: AppEvent) => void) {
     const source = new EventSource(this.url);
