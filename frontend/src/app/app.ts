@@ -178,14 +178,18 @@ export class App implements OnDestroy {
   onStartTraining() {
     this.trainingState.set('training');
     this.trainingProgress.set(0);
-    this.trainingStatus.set('Iniciando entrenamiento...');
+    this.trainingStatus.set('Entrenando modelo...');
 
     this.api.startTraining().subscribe({
+      next: () => {
+        this.trainingState.set('completed');
+        this.trainingProgress.set(100);
+        this.trainingStatus.set('Entrenamiento completado');
+      },
       error: error => {
-        console.error('Error al iniciar el entrenamiento:', error);
-
+        console.error('Error durante el entrenamiento:', error);
         this.trainingState.set('error');
-        this.trainingStatus.set('No se pudo iniciar el entrenamiento');
+        this.trainingStatus.set('No se pudo completar el entrenamiento');
       }
     });
   }
