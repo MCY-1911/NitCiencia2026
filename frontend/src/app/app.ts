@@ -84,7 +84,9 @@ export class App implements OnDestroy {
   constructor() {
     this.loadData();
     this.startLivePolling();
+
     this.events.connect(event => {
+      console.log('Evento SSE:', event);
 
       if (event.type === 'new_capture') {
         this.loadData();
@@ -92,25 +94,32 @@ export class App implements OnDestroy {
 
       if (event.type === 'training_progress') {
         this.trainingState.set('training');
-        this.trainingProgress.set(
-          event.progress ?? 0
-        );
-        this.trainingStatus.set(
-          event.status ?? 'Entrenando...'
-        );
+        this.trainingProgress.set(event.progress ?? 0);
+        this.trainingStatus.set(event.status ?? 'Entrenando...');
       }
 
       if (event.type === 'training_completed') {
         this.trainingState.set('completed');
         this.trainingProgress.set(100);
-        this.trainingStatus.set(
-          event.status ?? 'Entrenamiento completado'
-        );
+        this.trainingStatus.set(event.status ?? 'Entrenamiento completado');
       }
 
+      if (
+        event.prediction &&
+        event.confidence !== undefined &&
+        event.probabilities &&
+        event.image
+      ) {
+        this.inferenceImageUrl.set(`data:image/jpeg;base64,${event.image}`);
+
+        this.inferenceResult.set({
+          prediction: event.prediction,
+          confidence: event.confidence,
+          probabilities: event.probabilities
+        });
+      }
     });
   }
-
   loadData() {
     this.api.getPendingCaptures()
       .subscribe(captures => {
@@ -204,7 +213,7 @@ export class App implements OnDestroy {
     ).subscribe({
       next: response => {
         this.liveImageUrl.set(`data:image/jpeg;base64,${response.result}`);
-        console.log(response.result.substring(0, 50));      },
+      },
       error: error => {
         console.error('Error obteniendo imagen del MCU:', error);
       }
