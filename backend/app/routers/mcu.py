@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/api/mcu")
 
-MCU_URL = "http://192.168.53.209/jsonrpc"
+MCU_URL = "http://192.168.0.109/jsonrpc"
 
 
 @router.post("/image")
