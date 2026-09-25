@@ -3,9 +3,7 @@
 # ============================================================
 
 ALLOWED_LABELS = (
-    "objeto_1",
-    "objeto_2",
-    "objeto_3",
-    "objeto_4",
-    "objeto_5",
+    "manzana",
+    "pera",
+    "plátano",
 )

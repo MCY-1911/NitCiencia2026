@@ -187,7 +187,7 @@ export class App implements OnDestroy {
 
     this.livePolling = setInterval(() => {
       this.loadLiveFrame();
-    }, 200);
+    }, 500);
   }
 
   stopLivePolling() {

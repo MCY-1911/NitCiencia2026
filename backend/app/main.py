@@ -19,6 +19,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.state.model = None
+
 app.include_router(captures.router)
 app.include_router(dataset.router)
 app.include_router(events.router)
