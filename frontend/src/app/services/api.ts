@@ -10,9 +10,8 @@ import { McuResponse } from '../models/mcu.model';
 export class Api {
 
   private http = inject(HttpClient);
-  private backendUrl = 'http://localhost:8000';
-  private apiUrl = `${this.backendUrl}/api`;
-  private mcuUrl = 'http://192.168.53.209/jsonrpc';
+  private backendUrl = 'http://aiotserver.uji.es';
+  private apiUrl = `${this.backendUrl}/coral/api`;
 
   // ============================================================
   // CAPTURES
