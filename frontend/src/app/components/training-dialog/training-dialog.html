@@ -1,55 +1,70 @@
-<p-dialog header="Entrenar Modelo" [modal]="true" [visible]="visible" (visibleChange)="visibleChange.emit($event)"
+<p-dialog header="Entrenar model" [modal]="true" [visible]="visible" (visibleChange)="visibleChange.emit($event)"
     [closable]="false" [style]="{ width: '32rem' }">
+
     @if (state === 'ready') {
     <div class="flex flex-col gap-5">
         <div>
-            <p class="font-medium">¿Quieres comenzar el entrenamiento?</p>
-            <p class="mt-2 text-sm text-surface-500">El modelo aprenderá a reconocer los objetos utilizando las imágenes
-                que has etiquetado.</p>
+            <p class="font-medium">Vols començar l'entrenament?</p>
+
+            <p class="mt-2 text-sm text-surface-500">
+                El model aprendrà a reconéixer els objectes utilitzant les imatges que has etiquetat.
+            </p>
         </div>
+
         <div class="flex justify-end gap-3">
-<p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="cancel()" />            <p-button label="Empezar entrenamiento" severity="info" (onClick)="start()" />
+            <p-button label="Cancel·lar" severity="secondary" [outlined]="true" (onClick)="cancel()" />
+            <p-button label="Començar l'entrenament" severity="info" (onClick)="start()" />
         </div>
     </div>
+
     } @else if (state === 'training') {
     <div class="flex flex-col gap-5">
         <div>
             <p class="font-medium">{{ status }}</p>
+
             <p class="mt-2 text-sm text-surface-500">
                 La IA està aprenent amb les imatges etiquetades. Aquest procés pot tardar uns moments.
             </p>
         </div>
-    
+
         <p-progressbar mode="indeterminate" />
-    
+
         <p class="text-center text-sm text-surface-500">
             Entrenant...
         </p>
     </div>
+
     } @else if (state === 'completed') {
     <div class="flex flex-col gap-5">
         <div>
             <p class="font-medium">Entrenament completat</p>
+
             <p class="mt-2 text-sm text-surface-500">
-                El model ja està preparat per reconéixer objectes.
+                El model ja està preparat per a reconéixer objectes.
             </p>
         </div>
-    
+
         <p-progressbar [value]="100" [showValue]="true" />
-    
+
         <div class="flex justify-end">
             <p-button label="Començar a provar" severity="success" (onClick)="test()" />
         </div>
     </div>
+
     } @else if (state === 'error') {
     <div class="flex flex-col gap-5">
         <div>
-            <p class="font-medium">Ha ocurrido un error</p>
-            <p class="mt-2 text-sm text-surface-500">{{ status }}</p>
+            <p class="font-medium">S'ha produït un error</p>
+
+            <p class="mt-2 text-sm text-surface-500">
+                {{ status }}
+            </p>
         </div>
+
         <div class="flex justify-end">
-            <p-button label="Cerrar" severity="secondary" (onClick)="close()" />
+            <p-button label="Tancar" severity="secondary" (onClick)="close()" />
         </div>
     </div>
     }
+
 </p-dialog>
