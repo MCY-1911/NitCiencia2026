@@ -8,8 +8,7 @@
                 que has etiquetado.</p>
         </div>
         <div class="flex justify-end gap-3">
-            <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="close()" />
-            <p-button label="Empezar entrenamiento" severity="info" (onClick)="start()" />
+<p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="cancel()" />            <p-button label="Empezar entrenamiento" severity="info" (onClick)="start()" />
         </div>
     </div>
     } @else if (state === 'training') {

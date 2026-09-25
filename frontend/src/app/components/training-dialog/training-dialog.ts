@@ -20,6 +20,11 @@ export class TrainingDialog {
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() startTraining = new EventEmitter<void>();
   @Output() testModel = new EventEmitter<void>();
+  @Output() cancelTraining = new EventEmitter<void>();
+
+  cancel() {
+    this.cancelTraining.emit();
+  }
 
   close() {
     this.visibleChange.emit(false);

@@ -67,17 +67,13 @@ export class App implements OnDestroy {
     this.inferenceImageUrl.set(undefined);
   }
 
-  testInference() {
-    this.inferenceImageUrl.set(this.liveImageUrl());
+  cancelInferenceTraining() {
+    this.trainingDialogVisible.set(false);
+    this.appMode.set('teach');
 
-    this.inferenceResult.set({
-      prediction: 'Plàtan',
-      confidence: 0.93,
-      probabilities: {
-        'Plàtan': 0.93,
-        'Poma': 0.05,
-        'Taronja': 0.01,
-        'Pera': 0.01
+    this.api.changeMode().subscribe({
+      error: error => {
+        console.error('Error cambiando el modo del MCU:', error);
       }
     });
   }
