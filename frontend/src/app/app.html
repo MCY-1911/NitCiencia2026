@@ -1,11 +1,15 @@
 <app-header></app-header>
+
 <main class="w-full max-w-none px-6 py-6 lg:h-[calc(100dvh-5rem)]">
 
   <div class="flex h-full flex-col gap-6">
 
-    <!-- Introducción -->
-    <div class="flex shrink-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <!-- Cabecera de la sección -->
+    <div class="grid shrink-0 grid-cols-1 gap-4 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
+
+      <!-- Título -->
       <div>
+        @if (appMode() === 'teach') {
         <h1 class="text-3xl font-bold text-primary lg:text-4xl">
           Ensenya a la IA
         </h1>
@@ -13,21 +17,48 @@
         <p class="mt-1 text-base text-surface-600 lg:text-lg">
           Fes fotos dels objectes i digues-li què són.
         </p>
+        } @else {
+        <h1 class="text-3xl font-bold text-primary lg:text-4xl">
+          Prova la IA
+        </h1>
+
+        <p class="mt-1 text-base text-surface-600 lg:text-lg">
+          Descobreix què ha aprés la IA.
+        </p>
+        }
       </div>
 
-      <div class="flex items-center gap-3 rounded-xl bg-primary-50 px-5 py-3 text-sm text-primary-900">
-        <span class="text-2xl">💡</span>
-        <span>
-          Com més fotos diferents,<br>
-          millor aprendrà la IA.
-        </span>
+      <!-- Pestañas -->
+      <div class="flex justify-center gap-2">
+        <button class="cursor-pointer rounded-lg px-6 py-3 text-lg font-semibold"
+          [class.bg-primary]="appMode() === 'teach'" [class.text-white]="appMode() === 'teach'"
+          [class.bg-surface-200]="appMode() !== 'teach'" (click)="setAppMode('teach')">
+          1. Ensenya a la IA
+        </button>
+
+        <button class="cursor-pointer rounded-lg px-6 py-3 text-lg font-semibold"
+          [class.bg-primary]="appMode() === 'inference'" [class.text-white]="appMode() === 'inference'"
+          [class.bg-surface-200]="appMode() !== 'inference'" (click)="setAppMode('inference')">
+          2. Prova la IA
+        </button>
       </div>
 
-      <div class="flex justify-center">
-        <p-button label="Cambiar modo" severity="info" size="large" [raised]="true"
-          styleClass="w-full max-w-md justify-center py-3 text-lg font-semibold" (onClick)="changeMode()" />
+      <!-- Consejo -->
+      <div class="flex justify-end">
+        @if (appMode() === 'teach') {
+        <div class="flex items-center gap-3 rounded-xl bg-primary-50 px-5 py-3 text-sm text-primary-900">
+          <span class="text-2xl">💡</span>
+          <span>
+            Com més fotos diferents,<br>
+            millor aprendrà la IA.
+          </span>
+        </div>
+        }
       </div>
+
     </div>
+
+    @if (appMode() === 'teach') {
 
     <!-- Zona principal -->
     <div class="grid min-h-0 flex-1 grid-cols-1 items-stretch gap-6 lg:grid-cols-[2fr_1fr]">
@@ -44,6 +75,12 @@
     <div class="shrink-0">
       <app-dataset-panel [stats]="datasetStats()" [classes]="classes()" />
     </div>
+
+    }
+
+  @if (appMode() === 'inference') {
+    <app-inference-panel (continueLive)="continueInferenceLive()" class="block min-h-0 flex-1" [liveImageUrl]="liveImageUrl()" />
+  }
 
   </div>
 

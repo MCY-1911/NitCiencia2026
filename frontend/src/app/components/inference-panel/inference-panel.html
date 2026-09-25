@@ -1,0 +1,74 @@
+<div class="grid min-h-0 h-full grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
+
+    <!-- Imagen -->
+    <div class="flex min-h-0 flex-col rounded-xl border border-surface-200 bg-surface-0 p-4 shadow-sm">
+        <h2 class="mb-3 text-xl font-semibold">
+            {{ result ? 'Imatge analitzada' : 'Càmera en temps real' }}
+        </h2>
+
+        <div class="flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-xl bg-surface-900">
+            @if (displayedImageUrl) {
+            <img [src]="displayedImageUrl" alt="Imatge de la càmera" class="h-full w-full object-contain">
+            } @else {
+            <span class="text-surface-400">Esperant imatge de la càmera...</span>
+            }
+        </div>
+    </div>
+
+    <!-- Predicción -->
+    <div class="flex min-h-0 flex-col rounded-xl border border-surface-200 bg-surface-0 p-5 shadow-sm">
+        <h2 class="text-xl font-semibold">Predicció de la IA</h2>
+
+        @if (!result) {
+        <div class="flex flex-1 flex-col items-center justify-center text-center">
+            <div class="text-5xl">🤖</div>
+
+            <p class="mt-4 text-2xl font-bold text-primary">
+                Esperant inferència
+            </p>
+
+            <p class="mt-2 text-surface-500">
+                Prem el botó del dispositiu per analitzar un objecte.
+            </p>
+        </div>
+        } @else {
+        <div class="mt-6 flex flex-1 flex-col">
+
+            <div class="text-center">
+                <p class="text-4xl font-bold text-primary">
+                    {{ result.prediction }}
+                </p>
+
+                <p class="mt-2 text-2xl font-semibold">
+                    {{ result.confidence * 100 | number:'1.0-1' }} %
+                </p>
+            </div>
+
+            <div class="mt-8 flex flex-col gap-4">
+                @for (item of probabilities; track item[0]) {
+                <div>
+                    <div class="mb-1 flex justify-between font-medium">
+                        <span>{{ item[0] }}</span>
+                        <span>{{ item[1] * 100 | number:'1.0-1' }} %</span>
+                    </div>
+
+                    <div class="h-3 overflow-hidden rounded-full bg-surface-200">
+                        <div class="h-full rounded-full bg-primary" [style.width.%]="item[1] * 100"></div>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <div class="mt-auto flex justify-center pt-6">
+                <button class="cursor-pointer rounded-lg bg-primary px-6 py-3 font-semibold text-white"
+                    (click)="continueLive.emit()">
+                    Tornar al directe
+                </button>
+            </div>
+
+        </div>
+        }
+
+    </div>
+
+</div>

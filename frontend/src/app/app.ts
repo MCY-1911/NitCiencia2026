@@ -13,12 +13,16 @@ import { TrainingState } from './models/training.model';
 import { finalize } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { InferenceDialog } from './components/inference-dialog/inference-dialog';
 import { CaptureLabelPanel } from './components/capture-label-panel/capture-label-panel';
+import { InferencePanel } from './components/inference-panel/inference-panel';
+import { InferenceResult } from './models/inferenceResult.model';
+
+
+type AppMode = 'teach' | 'inference';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, ImageViewer, DatasetPanel, CaptureLabelPanel, TrainingDialog, ButtonModule, ConfirmDialogModule, InferenceDialog],
+  imports: [Header, ImageViewer, DatasetPanel, CaptureLabelPanel, TrainingDialog, InferencePanel, ButtonModule, ConfirmDialogModule],
   providers: [ConfirmationService],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -46,12 +50,37 @@ export class App implements OnDestroy {
 
   inferenceDialogVisible = signal(false);
 
+  appMode = signal<AppMode>('teach');
+  switchingMode = signal(false);
+
   currentImageUrl = computed(() => {
     const capture = this.currentCapture();
     return capture?.image_url;
   });
 
   viewerTab = signal('captures');
+  inferenceResult = signal<InferenceResult | undefined>(undefined);
+  inferenceImageUrl = signal<string | undefined>(undefined);
+
+  continueInferenceLive() {
+    this.inferenceResult.set(undefined);
+    this.inferenceImageUrl.set(undefined);
+  }
+
+  testInference() {
+    this.inferenceImageUrl.set(this.liveImageUrl());
+
+    this.inferenceResult.set({
+      prediction: 'Plàtan',
+      confidence: 0.93,
+      probabilities: {
+        'Plàtan': 0.93,
+        'Poma': 0.05,
+        'Taronja': 0.01,
+        'Pera': 0.01
+      }
+    });
+  }
 
   constructor() {
     this.loadData();
@@ -247,13 +276,18 @@ export class App implements OnDestroy {
     this.stopLivePolling();
   }
 
-  changeMode() {
+  setAppMode(mode: AppMode) {
+    if (mode === this.appMode()) return;
+
+    this.appMode.set(mode);
+
+    if (mode === 'inference') {
+      this.testInference();
+    }
+
     this.api.changeMode().subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (error) => {
-        console.log(error);
+      error: error => {
+        console.error('Error cambiando el modo del MCU:', error);
       }
     });
   }
