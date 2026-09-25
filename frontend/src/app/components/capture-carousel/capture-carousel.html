@@ -1,6 +1,6 @@
 @if (captures.length > 0) {
-    <p-carousel [value]="captures" [numVisible]="numVisible" [numScroll]="1" [showNavigators]="showNavigators">
-        <ng-template #item let-capture>
+<p-carousel [value]="captures" [numVisible]="numVisible" [numScroll]="1" [showNavigators]="showNavigators"
+    [showIndicators]="false">        <ng-template #item let-capture>
             <button class="mx-3 block w-[calc(100%-1.5rem)] cursor-pointer overflow-hidden rounded-xl border-4 bg-surface-0 shadow-sm transition hover:shadow-md"
                 [class.border-green-500]="selectedCapture?.capture_id === capture.capture_id"
                 [class.border-transparent]="selectedCapture?.capture_id !== capture.capture_id" (click)="selectCapture(capture)">

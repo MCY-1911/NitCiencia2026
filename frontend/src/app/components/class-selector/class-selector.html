@@ -1,9 +1,17 @@
-<div class="flex flex-col gap-3">
-    @for(label of classes; track label) {
-        <p-button [label]="label" styleClass="w-full" size="large" (onClick)="selectClass(label)" [disabled]="disabled" />
+<div class="grid grid-cols-2 gap-3">
+    @for (label of classes; track label) {
+    <p-button [label]="label" styleClass="w-full" size="large" (onClick)="selectClass(label)" [disabled]="disabled" />
     }
-    <div class="mt-6">
-        <p-button label="Eliminar" severity="danger" size="large" styleClass="w-full" [disabled]="disabled"
-            (onClick)="deleteCapture()" />
+
+    @if (classes.length % 2 !== 0) {
+    <p-button label="Eliminar" severity="danger" size="large" styleClass="w-full" [disabled]="disabled"
+        (onClick)="deleteCapture()" />
+    } @else {
+    <div class="col-span-2 flex justify-center">
+        <div class="w-1/2">
+            <p-button label="Eliminar" severity="danger" size="large" styleClass="w-full" [disabled]="disabled"
+                (onClick)="deleteCapture()" />
+        </div>
     </div>
+    }
 </div>

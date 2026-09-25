@@ -1,28 +1,29 @@
 import { Component, Input } from '@angular/core';
-import { CardModule} from 'primeng/card';
-import { ProgressBarModule} from 'primeng/progressbar';
-import { TagModule } from 'primeng/tag';
+import { CardModule } from 'primeng/card';
 import { DatasetStats } from '../../models/dataset.model';
 
 @Component({
   selector: 'app-dataset-panel',
-  imports: [CardModule, ProgressBarModule, TagModule],
+  imports: [CardModule],
   templateUrl: './dataset-panel.html',
   styleUrl: './dataset-panel.css',
 })
 export class DatasetPanel {
+  @Input() stats?: DatasetStats;
+  @Input() classes: string[] = [];
 
-  @Input()
-  stats?: DatasetStats;
+  getIcon(label: string): string {
+    const icons: Record<string, string> = {
+      manzana: '🍎',
+      poma: '🍎',
+      pera: '🍐',
+      plátano: '🍌',
+      platano: '🍌',
+      plàtan: '🍌',
+      naranja: '🍊',
+      taronja: '🍊'
+    };
 
-  @Input()
-  classes: string[] = [];
-
-
-  percentage(label: string): number {
-    if (!this.stats || this.stats.total === 0)
-      return 0;
-    const value = this.stats.classes[label] ?? 0;
-    return ( value / this.stats.total) * 100;
+    return icons[label.toLowerCase()] ?? '📦';
   }
 }

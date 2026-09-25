@@ -1,0 +1,17 @@
+<div class="flex h-full flex-col rounded-xl border border-surface-200 bg-surface-0 p-4 shadow-sm">
+
+    <div>
+        <h2 class="mb-3 text-xl font-semibold">Imatges capturades</h2>
+
+        <app-capture-carousel [captures]="captures" [selectedCapture]="selectedCapture"
+            (selected)="captureSelected.emit($event)" />
+    </div>
+
+    <div class="mt-6 flex flex-1 flex-col justify-center">
+        <h2 class="mb-4 text-xl font-semibold">Què és aquesta imatge?</h2>
+
+        <app-class-selector [classes]="classes" [disabled]="!selectedCapture" (selected)="classSelected.emit($event)"
+            (deleteSelected)="deleteSelected.emit()" />
+    </div>
+
+</div>

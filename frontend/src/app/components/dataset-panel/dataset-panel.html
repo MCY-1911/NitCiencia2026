@@ -1,29 +1,31 @@
-<p-card>
+<p-card styleClass="w-full">
     <ng-template #title>
-        Objetos
+        Exemples guardats
     </ng-template>
 
-    @if(stats){
-        <div class="flex flex-col gap-5">
-            <div class="flex justify-between items-center">
-                <span>
-                    Total imágenes
-                </span>
-                <p-tag [value]="stats.total.toString()" severity="info"/>
+    @if (stats) {
+    <div class="flex w-full divide-x divide-surface-200 overflow-x-auto">
+        @for (label of classes; track label) {
+        <div class="flex min-w-0 flex-1 items-center gap-4 px-6 first:pl-0 last:pr-0">
+
+            <div class="flex h-16 w-16 shrink-0 items-center justify-center text-5xl">
+                {{ getIcon(label) }}
             </div>
 
-            @for( label of classes; track label ){
-                <div>
-                    <div class="flex justify-between  mb-2">
-                        <span class="font-medium">{{label}}</span>
-                        <span>{{stats.classes[label]}}</span>
-                    </div>
-                    <p-progressbar [value]="
-                                    percentage(label)
-                                " [showValue]="false" />
+            <div class="min-w-0">
+                <div class="truncate text-xl font-bold">
+                    {{ label }}
                 </div>
-        }
+
+                <div class="mt-1 text-base text-surface-600">
+                    {{ stats.classes[label] }} fotos
+                </div>
+            </div>
+
         </div>
+        }
+    </div>
+    } @else {
+    <p>Esperando datos...</p>
     }
-    @else { <p> Esperando datos...</p>}
 </p-card>

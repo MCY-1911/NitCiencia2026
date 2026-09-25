@@ -16,16 +16,14 @@ export class CaptureCarousel {
   @Output() selected = new EventEmitter<Capture>();
 
   get numVisible(): number {
-    return Math.min(this.captures.length, 3);
+    return this.captures.length > 0 ? 1 : 0;
   }
 
   get showNavigators(): boolean {
-    return this.captures.length > 3;
+    return this.captures.length > 1;
   }
 
   selectCapture(capture: Capture) {
-
     this.selected.emit(capture);
-
   }
 }

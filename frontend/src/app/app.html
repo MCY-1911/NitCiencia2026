@@ -1,53 +1,45 @@
 <app-header></app-header>
+<main class="w-full max-w-none px-6 py-6 lg:h-[calc(100dvh-5rem)]">
 
-<main class="mx-auto max-w-7xl p-6">
+  <div class="flex h-full flex-col gap-6">
 
-  <div class="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
+    <!-- Introducción -->
+    <div class="flex shrink-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-primary lg:text-4xl">
+          Ensenya a la IA
+        </h1>
 
-    <!-- Imagen principal / Visor en tiempo real -->
-    <app-image-viewer [imageUrl]="currentImageUrl()" [liveImageUrl]="liveImageUrl()"
-      (tabChange)="onViewerTabChange($event)" />
-
-    <!-- Selección de clase -->
-    @if (viewerTab() === 'captures') {
-      <div class="flex h-full items-center">
-        <app-class-selector [classes]="classes()" (selected)="onClassSelected($event)" (deleteSelected)="confirmDeleteCapture()" class="w-full" [disabled]="!currentCapture()"/>
-      </div>
-    }
-
-  </div>
-
-  <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
-
-    <!-- Columna izquierda -->
-    <div class="flex flex-col gap-6">
-
-      @if (viewerTab() === 'captures') {
-
-      <!-- Capturas pendientes -->
-      <app-capture-carousel [captures]="captures()" [selectedCapture]="currentCapture()"
-        (selected)="onCaptureSelected($event)" />
-
-      <!-- Entrenamiento -->
-      <div class="flex justify-center">
-        <p-button label="Entrenar Modelo" severity="info" size="large" [raised]="true"
-          styleClass="w-full max-w-md justify-center py-3 text-lg font-semibold" (onClick)="openTrainingDialog()" />
+        <p class="mt-1 text-base text-surface-600 lg:text-lg">
+          Fes fotos dels objectes i digues-li què són.
+        </p>
       </div>
 
-      }
+      <div class="flex items-center gap-3 rounded-xl bg-primary-50 px-5 py-3 text-sm text-primary-900">
+        <span class="text-2xl">💡</span>
+        <span>
+          Com més fotos diferents,<br>
+          millor aprendrà la IA.
+        </span>
+      </div>
+    </div>
+
+    <!-- Zona principal -->
+    <div class="grid min-h-0 flex-1 grid-cols-1 items-stretch gap-6 lg:grid-cols-[2fr_1fr]">
+
+      <app-image-viewer class="block h-full min-h-0" [liveImageUrl]="liveImageUrl()" />
+
+      <app-capture-label-panel class="block h-full min-h-0" [captures]="captures()" [selectedCapture]="currentCapture()"
+        [classes]="classes()" (captureSelected)="onCaptureSelected($event)" (classSelected)="onClassSelected($event)"
+        (deleteSelected)="confirmDeleteCapture()" />
 
     </div>
 
-    <!-- Conteo del dataset -->
-    <app-dataset-panel [stats]="datasetStats()" [classes]="classes()" />
+    <!-- Dataset -->
+    <div class="shrink-0">
+      <app-dataset-panel [stats]="datasetStats()" [classes]="classes()" />
+    </div>
 
   </div>
 
 </main>
-
-<p-confirmdialog [closable]="false"/>
-
-<app-training-dialog [visible]="trainingDialogVisible()" [state]="trainingState()" [progress]="trainingProgress()"
-  [status]="trainingStatus()" (visibleChange)="trainingDialogVisible.set($event)" (startTraining)="onStartTraining()" (testModel)="openInferenceDialog()"/>
-
-<app-inference-dialog [visible]="inferenceDialogVisible()" [liveImageUrl]="liveImageUrl()" (visibleChange)="inferenceDialogVisible.set($event)" />

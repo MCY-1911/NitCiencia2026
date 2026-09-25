@@ -6,8 +6,6 @@ import { DatasetStats } from './models/dataset.model';
 import { Header } from './components/header/header';
 import { ImageViewer } from './components/image-viewer/image-viewer';
 import { DatasetPanel } from './components/dataset-panel/dataset-panel';
-import { CaptureCarousel } from './components/capture-carousel/capture-carousel';
-import { ClassSelector } from './components/class-selector/class-selector';
 import { Events } from './services/events';
 import { TrainingDialog } from './components/training-dialog/training-dialog';
 import { ButtonModule } from 'primeng/button';
@@ -16,10 +14,11 @@ import { finalize } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InferenceDialog } from './components/inference-dialog/inference-dialog';
+import { CaptureLabelPanel } from './components/capture-label-panel/capture-label-panel';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, ImageViewer, DatasetPanel, CaptureCarousel, ClassSelector, TrainingDialog, ButtonModule, ConfirmDialogModule, InferenceDialog],
+  imports: [Header, ImageViewer, DatasetPanel, CaptureLabelPanel, TrainingDialog, ButtonModule, ConfirmDialogModule, InferenceDialog],
   providers: [ConfirmationService],
   templateUrl: './app.html',
   styleUrl: './app.css'
