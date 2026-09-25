@@ -8,12 +8,13 @@ from app.models.model import create_model
 
 class TrainingService:
 
-    def __init__(self):
+    def __init__(self, model, class_names):
         self.is_training = False
         self.img_size = (324, 324)
         self.batch_size = 16
         self.epochs = 20
-        self.app = None
+        self.model = model
+        self.class_names = class_names
 
     async def start(self, app) -> bool:
 
@@ -82,7 +83,7 @@ class TrainingService:
 
             class_names = train_ds.class_names
 
-            print("Clases:", class_names)
+            self.class_names = class_names
 
             model = create_model(len(class_names))
 
@@ -90,12 +91,10 @@ class TrainingService:
                 train_ds,
                 validation_data=val_ds,
                 epochs=self.epochs,
+                verbose=0
             )
 
-            self.app.state.model = model
-
-            print(history.history["accuracy"][-1])
-            print(history.history["val_accuracy"][-1])
+            self.model = model
 
             return {
                 "classes": class_names,
@@ -105,6 +104,3 @@ class TrainingService:
 
         finally:
             self.is_training = False
-
-
-trainer = TrainingService()

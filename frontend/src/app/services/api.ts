@@ -74,7 +74,7 @@ export class Api {
 
   startTraining() {
     return this.http.post<{ status: string }>(
-      `${this.apiUrl}/training/start`,
+      `${this.apiUrl}/model/startTrain`,
       {}
     );
   }
