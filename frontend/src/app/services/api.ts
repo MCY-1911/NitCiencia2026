@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Capture } from '../models/capture.model';
 import { DatasetClasses, DatasetStats } from '../models/dataset.model';
-import { McuImageResponse } from '../models/imageMCU.model';
+import { McuResponse } from '../models/mcu.model';
 
 @Injectable({
   providedIn: 'root',
@@ -84,6 +84,26 @@ export class Api {
   // ============================================================
 
   getLiveFrame() {
-    return this.http.post<McuImageResponse>(`${this.apiUrl}/mcu/image`, {});
+    return this.http.post<McuResponse>(`${this.apiUrl}/mcu/image`, {});
   }
+
+
+  // ============================================================
+  // CHANGE MODE
+  // ============================================================
+
+  changeMode() {
+    return this.http.post<McuResponse>(`${this.apiUrl}/mcu/changeMode`, {});
+  }
+
+  // ============================================================
+  // INFERENCE
+  // ============================================================
+
+  // makeInference() {
+  //   return this.http.post<{ status: string }>(
+  //     `${this.apiUrl}/model/startTrain`,
+  //     {}
+  //   );
+  // }
 }

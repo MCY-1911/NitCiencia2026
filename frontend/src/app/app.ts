@@ -186,7 +186,7 @@ export class App implements OnDestroy {
 
     this.livePolling = setInterval(() => {
       this.loadLiveFrame();
-    }, 500);
+    }, 200);
   }
 
   stopLivePolling() {
@@ -245,5 +245,16 @@ export class App implements OnDestroy {
 
   ngOnDestroy() {
     this.stopLivePolling();
+  }
+
+  changeMode() {
+    this.api.changeMode().subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 }

@@ -7,13 +7,24 @@ from app.services.training_service import TrainingService
 from app.services.inference_service import InferenceService
 
 
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:4200")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.model = None
+    app.state.class_names = []
+    app.state.trainer = TrainingService()
+    app.state.inference = InferenceService()
+    yield
+
+
 app = FastAPI(
     title = "NitCiencia2026 API",
     description = "API para la aplicación NitCiencia2026",
-    version = "1.0.0"
+    version = "1.0.0",
+    lifespan=lifespan
 )
-
-frontend_url = os.getenv("FRONTEND_URL", "http://localhost:4200")
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,14 +33,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    app.state.model = None
-    app.state.class_names = []
-    app.state.trainer = TrainingService(app.state.model, app.state.class_names)
-    app.state.inference = InferenceService(app.state.model, app.state.class_names)
-
 
 app.include_router(captures.router)
 app.include_router(dataset.router)

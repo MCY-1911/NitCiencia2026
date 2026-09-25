@@ -8,27 +8,24 @@ from app.models.model import create_model
 
 class TrainingService:
 
-    def __init__(self, model, class_names):
+    def __init__(self):
         self.is_training = False
         self.img_size = (324, 324)
         self.batch_size = 16
         self.epochs = 20
-        self.model = model
-        self.class_names = class_names
 
-    async def start(self, app) -> bool:
+    async def start(self) -> bool:
 
         if self.is_training:
             return False
 
         self.is_training = True
-        self.app = app
         asyncio.create_task(self._run_training())
 
         return True
 
 
-    async def _run_training(self):
+    async def run_training(self):
         try:
 
             # steps = [
@@ -94,9 +91,7 @@ class TrainingService:
                 verbose=0
             )
 
-            self.model = model
-
-            return {
+            return model, class_names, {
                 "classes": class_names,
                 "accuracy": float(history.history["accuracy"][-1]),
                 "val_accuracy": float(history.history["val_accuracy"][-1]),
