@@ -244,7 +244,7 @@ export class App implements OnDestroy {
 
     this.confirmationService.confirm({
       header: 'Eliminar captura',
-      message: '¿Seguro que quieres eliminar esta captura?',
+      message: 'Segur que vols eliminar esta captura?',
       acceptLabel: 'Eliminar',
       rejectLabel: 'Cancelar',
       acceptButtonProps: {

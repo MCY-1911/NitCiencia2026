@@ -5,12 +5,12 @@
             class="mx-3 block w-[calc(100%-1.5rem)] cursor-pointer overflow-hidden rounded-xl border-4 bg-surface-0 shadow-sm transition hover:shadow-md"
             [class.border-green-500]="selectedCapture?.capture_id === capture.capture_id"
             [class.border-transparent]="selectedCapture?.capture_id !== capture.capture_id" (click)="selectCapture(capture)">
-            <img [src]="capture.image_url" alt="Captura pendiente" class="h-auto w-full">
+            <img [src]="capture.image_url" alt="Captura pendiente" class="aspect-square w-full object-contain">
         </button>
         </ng-template>
     </p-carousel>
 } @else {
     <div class="rounded-xl border border-dashed border-surface-300 p-6 text-center text-surface-500">
-        No hay capturas pendientes
+        No hi ha captures pendents
     </div>
 }

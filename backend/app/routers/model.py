@@ -22,7 +22,7 @@ async def inference(request: Request):
     content_type = request.headers.get("content-type", "").split(";")[0].lower()
     
     if content_type != "image/jpeg":
-        raise HTTPException(status_code=415, detail="Se esperaba una imagen JPEG")
+        raise HTTPException(status_code=415, detail="S'esperava una imatge JPEG")
 
     
     image_bytes = await request.body()

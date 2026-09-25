@@ -12,7 +12,7 @@ class InferenceService:
     def inference(self, model, class_names, image):
         if model is None:
             return {
-                "error" : "No hay ningún modelo entrenado"
+                "error" : "No hi ha cap model entrenat"
             }
 
         image = tf.expand_dims(image, axis=0)
