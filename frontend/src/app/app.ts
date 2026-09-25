@@ -95,13 +95,13 @@ export class App implements OnDestroy {
       if (event.type === 'training_progress') {
         this.trainingState.set('training');
         this.trainingProgress.set(event.progress ?? 0);
-        this.trainingStatus.set(event.status ?? 'Entrenando...');
+        this.trainingStatus.set(event.status ?? 'Entrenant...');
       }
 
       if (event.type === 'training_completed') {
         this.trainingState.set('completed');
         this.trainingProgress.set(100);
-        this.trainingStatus.set(event.status ?? 'Entrenamiento completado');
+        this.trainingStatus.set(event.status ?? 'Entrenament completat');
       }
 
       if (
@@ -187,18 +187,18 @@ export class App implements OnDestroy {
   onStartTraining() {
     this.trainingState.set('training');
     this.trainingProgress.set(0);
-    this.trainingStatus.set('Entrenando modelo...');
+    this.trainingStatus.set('Entrenant model...');
 
     this.api.startTraining().subscribe({
       next: () => {
         this.trainingState.set('completed');
         this.trainingProgress.set(100);
-        this.trainingStatus.set('Entrenamiento completado');
+        this.trainingStatus.set('Entrenament completat');
       },
       error: error => {
         console.error('Error durante el entrenamiento:', error);
         this.trainingState.set('error');
-        this.trainingStatus.set('No se pudo completar el entrenamiento');
+        this.trainingStatus.set("No s'ha pogut completar l'entrenament");
       }
     });
   }
