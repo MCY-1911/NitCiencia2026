@@ -69,13 +69,16 @@ export class App implements OnDestroy {
 
   cancelInferenceTraining() {
     this.trainingDialogVisible.set(false);
-    this.appMode.set('teach');
 
-    this.api.changeMode().subscribe({
-      error: error => {
-        console.error('Error cambiando el modo del MCU:', error);
-      }
-    });
+    if (this.appMode() === 'inference') {
+      this.appMode.set('teach');
+
+      this.api.changeMode().subscribe({
+        error: error => {
+          console.error('Error cambiando el modo del MCU:', error);
+        }
+      });
+    }
   }
 
   constructor() {
@@ -277,10 +280,28 @@ export class App implements OnDestroy {
 
     this.appMode.set(mode);
 
+    if (mode === 'inference') {
+      this.openTrainingDialog();
+    }
+
     this.api.changeMode().subscribe({
       error: error => {
         console.error('Error cambiando el modo del MCU:', error);
       }
     });
+  }
+
+  onTrainingDialogVisibleChange(visible: boolean) {
+    this.trainingDialogVisible.set(visible);
+
+    if (!visible && this.trainingState() !== 'completed') {
+      this.appMode.set('teach');
+    }
+  }
+
+  finishTraining() {
+    this.trainingDialogVisible.set(false);
+    this.inferenceResult.set(undefined);
+    this.inferenceImageUrl.set(undefined);
   }
 }
