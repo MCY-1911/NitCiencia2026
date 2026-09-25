@@ -277,10 +277,6 @@ export class App implements OnDestroy {
 
     this.appMode.set(mode);
 
-    if (mode === 'inference') {
-      this.testInference();
-    }
-
     this.api.changeMode().subscribe({
       error: error => {
         console.error('Error cambiando el modo del MCU:', error);
