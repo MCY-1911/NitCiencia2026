@@ -304,4 +304,35 @@ export class App implements OnDestroy {
     this.inferenceResult.set(undefined);
     this.inferenceImageUrl.set(undefined);
   }
+
+  confirmArchiveDataset() {
+    this.confirmationService.confirm({
+      header: 'Començar una nova sessió',
+      message: 'Les imatges actuals es guardaran en el dataset acumulat. Vols continuar?',
+      acceptLabel: 'Continuar',
+      rejectLabel: 'Cancel·lar',
+      acceptButtonProps: {
+        severity: 'danger'
+      },
+      rejectButtonProps: {
+        severity: 'secondary',
+        outlined: true
+      },
+      accept: () => this.archiveDataset()
+    });
+  }
+
+  archiveDataset() {
+    this.api.archiveDataset().subscribe({
+      next: () => {
+        this.loadData();
+        this.inferenceResult.set(undefined);
+        this.inferenceImageUrl.set(undefined);
+        this.setAppMode('teach');
+      },
+      error: error => {
+        console.error('Error arxivant el dataset:', error);
+      }
+    });
+  }
 }

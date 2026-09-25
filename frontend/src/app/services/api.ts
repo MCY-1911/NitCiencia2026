@@ -68,6 +68,13 @@ export class Api {
     );
   }
 
+  archiveDataset() {
+    return this.http.post<{ status: string; moved: number }>(
+      `${this.apiUrl}/dataset/archive`,
+      {}
+    );
+  }
+
   // ============================================================
   // TRAINING
   // ============================================================

@@ -1,5 +1,6 @@
 from pathlib import Path
 from fastapi import APIRouter
+from uuid import uuid4
 from app.config import ALLOWED_LABELS
 
 router = APIRouter(prefix="/api/dataset", tags=["dataset"])
@@ -13,6 +14,9 @@ DATASET_DIR = BASE_DIR / "data" / "dataset"
 
 # Extensiones que consideraremos imágenes válidas.
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+
+ACCUMULATED_DATASET_DIR = DATASET_DIR / "accumulated_dataset"
+ACCUMULATED_DATASET_DIR.mkdir(parents=True, exist_ok=True)
 
 # ============================================================
 # GET /api/dataset/classes
@@ -64,3 +68,28 @@ def get_dataset_stats():
         total += count
 
     return {"total": total, "classes": class_stats}
+
+
+# ============================================================
+# POST /api/dataset/archive
+# ============================================================
+
+@router.post("/archive")
+async def archive_dataset():
+    moved = 0
+
+    for label in ALLOWED_LABELS:
+        source_dir = DATASET_DIR / label
+        target_dir = ACCUMULATED_DATASET_DIR / label
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        for image_path in source_dir.glob("*.jpg"):
+            target_path = target_dir / image_path.name
+
+            if target_path.exists():
+                target_path = target_dir / f"{uuid4()}_{image_path.name}"
+
+            image_path.rename(target_path)
+            moved += 1
+
+    return {"status": "ok", "moved": moved}

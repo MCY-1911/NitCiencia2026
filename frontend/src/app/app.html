@@ -81,6 +81,10 @@
 @if (appMode() === 'inference') {
   <app-inference-panel class="block min-h-0 flex-1" [liveImageUrl]="liveImageUrl()"
   [inferenceImageUrl]="inferenceImageUrl()" [result]="inferenceResult()" (continueLive)="continueInferenceLive()" />
+
+    <div class="flex justify-end">
+      <p-button label="Nova sessió" severity="danger" (onClick)="confirmArchiveDataset()" />
+    </div>
 }
 
   </div>
