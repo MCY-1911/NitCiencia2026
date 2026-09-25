@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Request
 from app.services.notification_service import notifier
 import tensorflow as tf
+import base64
 
 router = APIRouter(prefix="/api/model", tags=["model"])
 training = False
@@ -38,8 +39,8 @@ async def inference(request: Request):
     result = request.app.state.inference.inference(request.app.state.model, request.app.state.class_names, image)
     print(result)
 
-    result["image"] = image_bytes
+    result["image"] = base64.b64encode(image_bytes).decode("utf-8")
 
-    notifier.notify(result)
+    await notifier.notify(result)
 
     return {"status": "ok"}

@@ -15,7 +15,7 @@ DATASET_DIR = BASE_DIR / "data" / "dataset"
 # Extensiones que consideraremos imágenes válidas.
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 
-ACCUMULATED_DATASET_DIR = DATASET_DIR / "accumulated_dataset"
+ACCUMULATED_DATASET_DIR =  BASE_DIR / "data" / "accumulated_dataset"
 ACCUMULATED_DATASET_DIR.mkdir(parents=True, exist_ok=True)
 
 # ============================================================
